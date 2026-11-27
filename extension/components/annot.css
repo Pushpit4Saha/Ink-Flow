@@ -1,0 +1,558 @@
+/* All styles live inside our Shadow DOM, so they never affect the page. */
+:host,
+.annot-root {
+  --brand: #d8a3a7; /* main pink */
+  --brand-dark: #000;
+  --green: #77c599;
+  --blue: #77a3c5;
+  --paper: #fbeeef;
+  --edge: rgba(0, 0, 0, 0.08);
+  --ink: #2e2a2b;
+  --muted: #7d7173;
+  --z: 2147483647;
+}
+
+.annot-root {
+  font-family: var(--annot-body-font, ui-sans-serif, system-ui, sans-serif);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.annot-root * {
+  box-sizing: border-box;
+}
+button,
+textarea,
+input,
+select {
+  font-family: inherit;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* --- button next to the selection --- */
+.annot-sel-btn {
+  position: fixed;
+  z-index: var(--z);
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: var(--brand);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  animation: annot-pop 0.12s ease-out;
+  overflow: hidden;
+}
+.annot-sel-btn img,
+.annot-fab img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 50%;
+}
+.annot-sel-btn:hover {
+  transform: scale(1.1);
+}
+
+/* --- sticky note editor --- */
+.annot-note {
+  position: fixed;
+  z-index: var(--z);
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  border: 1px solid var(--edge);
+  border-top: 4px solid var(--brand);
+  border-radius: 12px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
+  padding: 0 14px 12px;
+  animation: annot-pop 0.14s ease-out;
+}
+.annot-note-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 -14px 6px;
+  padding: 6px 8px 6px 14px;
+  cursor: move;
+  border-bottom: 1px dashed var(--edge);
+  user-select: none;
+}
+.annot-note-label {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  margin-right: auto;
+}
+.annot-colors {
+  display: flex;
+  gap: 5px;
+}
+.annot-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  padding: 0;
+  box-shadow: 0 0 0 1px var(--edge);
+}
+.annot-dot.on {
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.annot-note textarea,
+.annot-note input,
+.annot-note select {
+  font: inherit;
+  color: var(--ink);
+}
+.annot-note-title,
+.annot-mini-title,
+.annot-view-head strong {
+  font-family: var(--annot-title-font) !important;
+  font-weight: var(--annot-title-weight, 700) !important;
+  letter-spacing: 0.01em;
+}
+.annot-note-title {
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  font-size: 18px;
+  line-height: 1.35;
+  padding: 4px 0;
+}
+.annot-view-head strong {
+  font-size: 18px;
+}
+.annot-mini-title {
+  font-size: 16px;
+}
+.annot-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border-top: 1px solid var(--edge);
+  padding-top: 6px;
+}
+.annot-toolbar > button {
+  background: none;
+  border: none;
+  border-radius: 5px;
+  padding: 2px 7px;
+  min-width: 26px;
+  color: var(--muted);
+}
+.annot-toolbar > button:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--ink);
+}
+.annot-ai-state {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--muted);
+}
+.annot-ai-accept {
+  background: #fff;
+  border: 1px solid var(--blue);
+  color: #3f6f94;
+  border-radius: 10px;
+  font-size: 11px;
+  padding: 1px 8px;
+}
+
+.annot-editor .annot-pm {
+  min-height: 96px;
+  outline: none;
+  padding: 6px 0;
+}
+.annot-pm p {
+  margin: 0 0 6px;
+}
+.annot-pm ul,
+.annot-pm ol {
+  margin: 0 0 6px;
+  padding-left: 20px;
+}
+.annot-pm blockquote {
+  border-left: 3px solid var(--brand);
+  margin: 0 0 6px;
+  padding-left: 8px;
+}
+.annot-pm p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: #9a8f91;
+  font-style: italic;
+  pointer-events: none;
+  white-space: pre-wrap;
+}
+
+.annot-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0;
+}
+.annot-thumb {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--edge);
+  background: #fff;
+  display: block;
+}
+.annot-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.annot-thumb button {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  padding: 0;
+}
+
+.annot-row {
+  margin-top: 6px;
+}
+.annot-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+.annot-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: #fff;
+  border: 1px solid rgba(119, 163, 197, 0.6);
+  color: #3f6f94;
+  border-radius: 10px;
+  padding: 0 8px;
+  font-size: 12px;
+}
+.annot-chip button {
+  background: none;
+  border: none;
+  padding: 0 0 0 2px;
+  color: inherit;
+}
+.annot-tag-input {
+  flex: 1;
+  min-width: 80px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  padding: 3px 0;
+}
+.annot-tag-sugg {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.annot-tag-sugg button {
+  background: #fff;
+  border: 1px dashed var(--blue);
+  border-radius: 10px;
+  font-size: 12px;
+  padding: 0 8px;
+}
+.annot-folder-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+}
+.annot-folder-row select,
+.annot-folder-input {
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 3px 6px;
+  font-size: 13px;
+  max-width: 150px;
+}
+.annot-login-hint {
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid var(--brand);
+  border-radius: 6px;
+  padding: 6px 8px;
+  margin-top: 8px;
+}
+.annot-note-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.annot-note-actions .annot-small {
+  margin-right: auto;
+}
+.annot-btn {
+  background: var(--brand);
+  color: #fff !important;
+  border: none;
+  border-radius: 7px;
+  padding: 6px 14px;
+  font-weight: 600;
+}
+.annot-btn:hover,
+.annot-btn:active,
+.annot-sel-btn:active,
+.annot-fab:active {
+  background: #000;
+  color: #fff !important;
+}
+.annot-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.annot-btn-ghost {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  padding: 6px 8px;
+}
+
+/* --- viewing a saved note (click on a highlight) --- */
+.annot-view {
+  position: fixed;
+  z-index: var(--z);
+  width: 320px;
+  max-height: 60vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  border-top: 4px solid var(--brand);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+  padding: 10px 14px 12px;
+  animation: annot-pop 0.12s ease-out;
+}
+.annot-view-head {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.annot-view-body {
+  white-space: pre-wrap;
+  margin-top: 6px;
+  font-size: 13.5px;
+}
+.annot-view-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* --- floating round button --- */
+.annot-fab {
+  position: fixed;
+  z-index: var(--z);
+  right: 20px;
+  bottom: 20px;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  background: var(--brand);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  opacity: 0.9;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.annot-fab:hover {
+  opacity: 1;
+  transform: scale(1.06);
+}
+.annot-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 4px;
+  border-radius: 10px;
+  background: var(--green);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  border: 2px solid #fff;
+}
+
+/* --- panel above the floating button --- */
+.annot-panel {
+  position: fixed;
+  z-index: var(--z);
+  right: 20px;
+  bottom: 78px;
+  width: 310px;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  animation: annot-pop 0.14s ease-out;
+}
+.annot-panel-head,
+.annot-panel-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+}
+.annot-panel-head {
+  border-bottom: 1px solid #eee;
+  border-top: 4px solid var(--brand);
+}
+.annot-panel-foot {
+  border-top: 1px solid #eee;
+}
+.annot-panel-list {
+  overflow-y: auto;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.annot-mini {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: var(--brand);
+}
+.annot-mini:active,
+.annot-view:active {
+  background: #000 !important;
+  color: #fff !important;
+}
+.annot-mini:active *,
+.annot-view:active * {
+  color: #fff !important;
+}
+.annot-name {
+  font-family: 'Annot Lobster', cursive;
+  font-weight: 400;
+}
+.annot-orphan {
+  opacity: 0.75;
+  border: 1px dashed var(--edge);
+}
+.annot-orphan-label {
+  margin: 6px 0 0;
+}
+.annot-mini-title {
+  font-weight: 700;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.annot-mini-body {
+  font-size: 13px;
+  color: #4d4446;
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* --- PDF banner (Chrome's own PDF viewer) --- */
+.annot-pdf-banner {
+  position: fixed;
+  z-index: var(--z);
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border-radius: 12px;
+  border-left: 5px solid var(--brand);
+  padding: 8px 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+.annot-pdf-banner img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.annot-x {
+  background: none;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--muted);
+  padding: 0 4px;
+}
+.annot-link {
+  background: none;
+  border: none;
+  color: var(--brand-dark);
+  font-weight: 600;
+  padding: 0;
+}
+.annot-muted {
+  color: var(--muted);
+}
+.annot-small {
+  font-size: 11px;
+}
+
+/* --- toast --- */
+.annot-toast {
+  position: fixed;
+  z-index: var(--z);
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  background: #2e2a2b;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  box-shadow: inset 4px 0 0 var(--green), 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+@keyframes annot-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

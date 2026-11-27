@@ -1,0 +1,106 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-brand: #d8a3a7;
+  --color-brand-dark: #000000;
+  --color-green: #77c599;
+  --color-blue: #77a3c5;
+  --color-paper: #fbeeef;
+  --color-line: #efe2e3;
+  --color-ink: #2e2a2b;
+  --color-muted: #7d7173;
+  --color-cream: #fdf8f8;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body, 'Inter', ui-sans-serif, system-ui, sans-serif);
+}
+
+/* the cute title font chosen in Settings */
+.font-title {
+  font-family: var(--font-title, 'Lobster', cursive);
+  font-weight: var(--font-title-weight, 400) !important;
+  letter-spacing: 0.01em;
+}
+
+/* the app name always stays in Lobster, whatever title font is chosen */
+.font-lobster {
+  font-family: 'Lobster', cursive !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.01em;
+}
+
+/* primary buttons: dusty rose, black while hovered or pressed */
+.bg-brand:hover,
+.bg-brand:active {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* note cards: same rose, black while pressed */
+.note-block:active {
+  background: #000 !important;
+  border-color: #000 !important;
+  color: #fff !important;
+}
+.note-block:active * {
+  color: #fff !important;
+}
+
+/* rich text (Tiptap) */
+.pm-editor .ProseMirror {
+  outline: none;
+  min-height: 140px;
+}
+.pm-editor .ProseMirror p,
+.rich p {
+  margin: 0 0 0.5em;
+}
+.pm-editor .ProseMirror ul,
+.rich ul {
+  list-style: disc;
+  padding-left: 1.3em;
+  margin: 0 0 0.5em;
+}
+.pm-editor .ProseMirror ol,
+.rich ol {
+  list-style: decimal;
+  padding-left: 1.3em;
+  margin: 0 0 0.5em;
+}
+.pm-editor .ProseMirror blockquote,
+.rich blockquote {
+  border-left: 3px solid var(--color-brand);
+  padding-left: 0.6em;
+  margin: 0 0 0.5em;
+}
+.pm-editor .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: #9a8f91;
+  font-style: italic;
+  pointer-events: none;
+}
+
+/* PDF viewer */
+.pdf-page {
+  position: relative;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  margin: 0 auto 14px;
+}
+.pdf-page canvas {
+  display: block;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+}
